@@ -1,5 +1,13 @@
 <?php
-// $Id: elements.php,v 1.1 2012/03/31 16:00:16 ohwada Exp $
+// $Id: elements.php,v 1.2 2012/03/31 18:15:32 ohwada Exp $
+
+// 2012-03-31 K.OHWADA
+// Assigning the return value of new by reference is now deprecated.
+
+// 2006-12-20 K.OHWADA
+// use GIJOE's Ticket Class
+
+// Id: elements.php 85 2005-11-14 02:56:44Z tuff 
 ###############################################################################
 ##                Liaise -- Contact forms generator for XOOPS                ##
 ##                 Copyright (c) 2003-2005 NS Tai (aka tuff)                 ##
@@ -81,11 +89,19 @@ if( !isset($_POST['op']) || $_POST['op'] != 'save' ){
 	$criteria = new Criteria('form_id', $form_id);
 	$criteria->setSort('ele_order');
 	$criteria->setOrder('ASC');
-	
+
+// --- GIJOE's Ticket Class ---
+	$ticket = $xoopsGTicket->issue( __LINE__ );
+// ------
+
 	if( $elements =& $liaise_ele_mgr->getObjects($criteria) ){
 		foreach( $elements as $i ){
 			$id = $i->getVar('ele_id');
-			$renderer =& new LiaiseElementRenderer($i);
+
+// Assigning the return value of new by reference is now deprecated.
+//			$renderer =& new LiaiseElementRenderer($i);
+			$renderer = new LiaiseElementRenderer($i);
+
 			$ele_type = $i->getVar('ele_type');
 			$req = $i->getVar('ele_req');
 			$check_req = new XoopsFormCheckBox('', 'ele_req['.$id.']', $req);
@@ -102,10 +118,18 @@ if( !isset($_POST['op']) || $_POST['op'] != 'save' ){
 			echo '<td class="even" rowspan="2" align="center">'.$check_req->render()."</td>\n";
 			echo '<td class="even" rowspan="2" align="center">'.$text_order->render()."</td>\n";
 			echo '<td class="even" rowspan="2" align="center">'.$check_display->render().$hidden_id->render()."</td>\n";
+
+// --- GIJOE's Ticket Class ---
+//			echo '<td class="even" nowrap="nowrap" rowspan="2">
+//					<ul><li><a href="editelement.php?op=edit&amp;ele_id='.$id.'&amp;form_id='.$form_id.'">'._EDIT.'</a></li>
+//					<li><a href="editelement.php?op=edit&amp;ele_id='.$id.'&amp;form_id='.$form_id.'&amp;clone=1">'._CLONE.'</a></li>
+//					<li><a href="editelement.php?op=delete&amp;ele_id='.$id.'&amp;form_id='.$form_id.'">'._DELETE.'</a></li></ul></td>';
 			echo '<td class="even" nowrap="nowrap" rowspan="2">
 					<ul><li><a href="editelement.php?op=edit&amp;ele_id='.$id.'&amp;form_id='.$form_id.'">'._EDIT.'</a></li>
-					<li><a href="editelement.php?op=edit&amp;ele_id='.$id.'&amp;form_id='.$form_id.'&amp;clone=1">'._CLONE.'</a></li>
-					<li><a href="editelement.php?op=delete&amp;ele_id='.$id.'&amp;form_id='.$form_id.'">'._DELETE.'</a></li></ul></td>';
+					<li><a href="editelement.php?op=edit&amp;ele_id='.$id.'&amp;form_id='.$form_id.'&amp;clone=1">'._CLONE.'</a></li>';
+			echo '<li><a href="editelement.php?op=delete&amp;ele_id='.$id.'&amp;form_id='.$form_id.'&amp;XOOPS_G_TICKET='.$ticket.'">'._DELETE.'</a></li></ul></td>';
+// ------
+
 			echo '</tr>';
 			echo '<tr><td class="even" colspan="2">'.$ele_value->render()."</td>\n</tr>";
 		}
@@ -126,8 +150,22 @@ if( !isset($_POST['op']) || $_POST['op'] != 'save' ){
 	$hidden_form_id = new XoopsFormHidden('form_id', $form_id);
 	echo $hidden_op->render();
 	echo $hidden_form_id->render();
+
+// --- GIJOE's Ticket Class ---
+	echo $xoopsGTicket->getTicketHtml( __LINE__ );
+// ------
+
 	echo '</form>';
 }else{
+
+// --- GIJOE's Ticket Class ---	
+	if ( ! $xoopsGTicket->check( true , '',  false ) ) {
+		$err  = 'Ticket Error <br />';
+		$err .= $xoopsGTicket->getErrors();
+		redirect_header(LIAISE_ADMIN_URL, 3, $err);
+	}
+// ------
+
 	$form_id = isset($_POST['form_id']) ? intval($_POST['form_id']) : 0;
 	if( empty($form_id) ){
 		redirect_header(LIAISE_ADMIN_URL, 0, _AM_NOTHING_SELECTED);

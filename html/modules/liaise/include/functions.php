@@ -1,5 +1,10 @@
 <?php
-// $Id: functions.php,v 1.1 2012/03/31 16:00:14 ohwada Exp $
+// $Id: functions.php,v 1.2 2012/03/31 18:15:32 ohwada Exp $
+
+// 2008-09-15 K.OHWADA
+// for Xoops Cube Legacy
+
+// Id: functions.php 42 2005-09-18 16:28:17Z tuff 
 ###############################################################################
 ##                Liaise -- Contact forms generator for XOOPS                ##
 ##                 Copyright (c) 2003-2005 NS Tai (aka tuff)                 ##
@@ -34,7 +39,11 @@
 ###############################################################################
 
 function xoops_module_install_liaise(&$module){
-	global $moduleperm_handler;
+
+// --- for XCL ---
+//	global $moduleperm_handler;
+	$moduleperm_handler =& xoops_gethandler('groupperm');
+
 	/*
 	$msgs[] = 'Setting up default permissions...';
 	$m = '&nbsp;&nbsp;Grant permission of form id %u to group id %u ......%s';

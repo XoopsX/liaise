@@ -1,5 +1,10 @@
 <?php
-// $Id: footer.php,v 1.1 2012/03/31 16:00:18 ohwada Exp $
+// $Id: footer.php,v 1.2 2012/03/31 18:15:32 ohwada Exp $
+
+// 2008-09-15 K.OHWADA
+// for Xoops Cube Legacy
+
+// Id: footer.php 26 2005-09-04 09:52:40Z tuff 
 ###############################################################################
 ##                Liaise -- Contact forms generator for XOOPS                ##
 ##                 Copyright (c) 2003-2005 NS Tai (aka tuff)                 ##
@@ -38,7 +43,16 @@ $version = !substr($version, -1, 1) ? substr($version, 0, 3) : $version;
 $credits = "<div style='text-align: right; font-size: x-small; margin-top: 15px;'>Powered by <a href='about.php'>Liaise ".$version."</a>";
 echo $credits;
 
-$version_check = preg_match('/2\.0\.[9|10|11|12|13]/', XOOPS_VERSION);
+// --- for XCL ---
+//$version_check = preg_match('/2\.0\.[9|10|11|12|13]/', XOOPS_VERSION);
+if ( defined( 'XOOPS_CUBE_LEGACY' ) ) {
+	$pattern = '/2\.1\.\d+/';
+} else {
+	$pattern = '/2\.0\.\d+/';
+}
+$version_check = preg_match( $pattern, XOOPS_VERSION );
+// ------
+
 if( !$version_check ){
 	echo '<br /><span style="color: #F00;"><b>'._AM_XOOPS_VERSION_WRONG.'</b></span>';
 }

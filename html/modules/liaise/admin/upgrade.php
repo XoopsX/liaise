@@ -1,5 +1,10 @@
 <?php
-// $Id: upgrade.php,v 1.1 2012/03/31 16:00:17 ohwada Exp $
+// $Id: upgrade.php,v 1.2 2012/03/31 18:15:32 ohwada Exp $
+
+// 2012-03-01 K.OHWADA
+// $moduleperm_handler =& xoops_gethandler('groupperm');
+
+// Id: upgrade.php 26 2005-09-04 09:52:40Z tuff 
 ###############################################################################
 ##                Liaise -- Contact forms generator for XOOPS                ##
 ##                 Copyright (c) 2003-2005 NS Tai (aka tuff)                 ##
@@ -33,6 +38,10 @@
 ##  Project: Liaise                                                          ##
 ###############################################################################
 include 'admin_header.php';
+
+// added
+$moduleperm_handler =& xoops_gethandler('groupperm');
+
 $version = number_format($xoopsModule->getVar('version')/100, 2);
 $count =& $liaise_form_mgr->getCount();
 if( $version >= 1.2 || $count > 0 ){

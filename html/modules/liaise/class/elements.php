@@ -1,5 +1,10 @@
 <?php
-// $Id: elements.php,v 1.1 2012/03/31 16:00:18 ohwada Exp $
+// $Id: elements.php,v 1.2 2012/03/31 18:15:32 ohwada Exp $
+
+// 2006-12-20 K.OHWADA
+// Notice [PHP]: Only variable references should be returned by reference
+
+// Id: elements.php 61 2005-11-04 14:55:24Z tuff 
 ###############################################################################
 ##                Liaise -- Contact forms generator for XOOPS                ##
 ##                 Copyright (c) 2003-2005 NS Tai (aka tuff)                 ##
@@ -53,6 +58,9 @@ class LiaiseElementsHandler {
 	var $db;
 	var $db_table;
 	var $obj_class = 'LiaiseElements';
+
+// porting from XOOPS/class/uploader.php
+	var $errors = array();
 
 	function LiaiseElementsHandler(&$db) {
 		$this->db =& $db;
@@ -181,7 +189,11 @@ class LiaiseElementsHandler {
 		}
 		$result = $this->db->query($sql, $limit, $start);
 		if( !$result ){
-			return false;
+	
+//			return false;
+			$false = false;
+			return $false;
+
 		}
 		while( $myrow = $this->db->fetchArray($result) ){
 			$elements = new $this->obj_class();
@@ -193,9 +205,17 @@ class LiaiseElementsHandler {
 			}
 			unset($elements);
 		}
-		return count($ret) > 0 ? $ret : false;
+
+// Notice [PHP]: Only variable references should be returned by reference
+//		return count($ret) > 0 ? $ret : false;
+		if ( count($ret) == 0 ) {
+			$false = false;
+			return $false;
+		};
+		return $ret;
+
 	}
-	
+
     function getCount($criteria = null){
 		$sql = 'SELECT COUNT(*) FROM '.$this->db_table;
 		if( isset($criteria) && is_subclass_of($criteria, 'criteriaelement') ){
@@ -244,6 +264,5 @@ class LiaiseElementsHandler {
 		}
 		return false;
 	}
-	
 }
 ?>

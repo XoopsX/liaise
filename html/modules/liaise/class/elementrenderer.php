@@ -1,5 +1,13 @@
 <?php
-// $Id: elementrenderer.php,v 1.1 2012/03/31 16:00:18 ohwada Exp $
+// $Id: elementrenderer.php,v 1.2 2012/03/31 18:15:32 ohwada Exp $
+
+// 2012-03-31 K.OHWADA
+// Assigning the return value of new by reference is now deprecated.
+
+// 2006-12-20 K.OHWADA
+// reload form when token error
+
+// Id: elementrenderer.php 61 2005-11-04 14:55:24Z tuff 
 ###############################################################################
 ##                Liaise -- Contact forms generator for XOOPS                ##
 ##                 Copyright (c) 2003-2005 NS Tai (aka tuff)                 ##
@@ -48,8 +56,23 @@ class LiaiseElementRenderer{
 		$e = $this->_ele->getVar('ele_type');
 		$delimiter = $form->getVar('form_delimiter');
 		$form_ele_id = $admin ? 'ele_value['.$this->_ele->getVar('ele_id').']' : 'ele_'.$this->_ele->getVar('ele_id');
+
+// --- reload ---
+		$post_val = null;
+		if ( isset($_POST[$form_ele_id]) ) {
+			$post_val = $_POST[$form_ele_id];
+		}
+// ---
+
 		switch($e){
 			case 'text':
+
+// --- reload ---
+				if ($post_val) {
+					$ele_value[2] = $post_val;
+				}
+// ---
+
 				if( !is_object($xoopsUser) ){
 					$ele_value[2] = str_replace('{UNAME}', '', $ele_value[2]);
 					$ele_value[2] = str_replace('{EMAIL}', '', $ele_value[2]);
@@ -67,6 +90,13 @@ class LiaiseElementRenderer{
 			break;
 
 			case 'textarea':
+
+// --- reload ---
+				if ($post_val) {
+					$ele_value[0] = $post_val;
+				}
+// ---
+
 				$form_ele = new XoopsFormTextArea(
 					$ele_caption,
 					$form_ele_id,
@@ -77,6 +107,13 @@ class LiaiseElementRenderer{
 			break;
 			
 			case 'html':
+
+// --- reload ---
+				if ($post_val) {
+					$ele_value[0] = $post_val;
+				}
+// ---
+
 				global $check_req;
 				if( !$admin ){
 					$form_ele = new XoopsFormLabel(
@@ -101,9 +138,30 @@ class LiaiseElementRenderer{
 				$opt_count = 1;
 				while( $i = each($ele_value[2]) ){
 					$options[$opt_count] = $myts->stripSlashesGPC($i['key']);
-					if( $i['value'] > 0 ){
-						$selected[] = $opt_count;
+
+// --- reload ---
+//					if( $i['value'] > 0 ){
+//						$selected[] = $opt_count;
+//					}
+					if ( $post_val ) {
+						if( is_array($post_val) ) {
+							foreach ($post_val as $val) {
+								if( $val == $opt_count ) {
+									$selected[] = $opt_count;
+								}
+							}
+						} else {
+							if( $post_val == $opt_count ) {
+								$selected[] = $opt_count;
+							}
+						}
+					} else {
+						if( $i['value'] > 0 ){
+							$selected[] = $opt_count;
+						}
 					}
+// ---
+
 				$opt_count++;
 				}
 				$form_ele = new XoopsFormSelect(
@@ -125,15 +183,40 @@ class LiaiseElementRenderer{
 				$opt_count = 1;
 				while( $i = each($ele_value) ){
 					$options[$opt_count] = $i['key'];
-					if( $i['value'] > 0 ){
-						$selected[] = $opt_count;
+
+// --- reload ---
+//					if( $i['value'] > 0 ){
+//						$selected[] = $opt_count;
+//					}
+					if ( $post_val ) {
+						if( is_array($post_val) ) {
+							foreach ($post_val as $val) {
+								if( $val == $opt_count ) {
+									$selected[] = $opt_count;
+								}
+							}
+						} else {
+							if( $post_val == $opt_count ) {
+								$selected[] = $opt_count;
+							}
+						}
+					} else {
+						if( $i['value'] > 0 ){
+							$selected[] = $opt_count;
+						}
 					}
+// ---
+
 					$opt_count++;
 				}
 				
 				$form_ele = new XoopsFormElementTray($ele_caption, $delimiter == 'b' ? '<br />' : ' ');
 				while( $o = each($options) ){
-					$t =& new XoopsFormCheckBox(
+
+// Assigning the return value of new by reference is now deprecated.
+//					$t =& new XoopsFormCheckBox(
+					$t =  new XoopsFormCheckBox(
+
 						'',
 						$form_ele_id.'[]',
 						$selected
@@ -162,16 +245,33 @@ class LiaiseElementRenderer{
 							$options[$opt_count] = constant($i['key']);
 						break;
 					}
-					if( $i['value'] > 0 ){
-						$selected = $opt_count;
+
+// --- reload ---
+//					if( $i['value'] > 0 ){
+//						$selected = $opt_count;
+//					}
+					if ( $post_val ) {
+						if( $post_val == $opt_count ) {
+							$selected = $opt_count;
+						}
+					} else {
+						if( $i['value'] > 0 ){
+							$selected = $opt_count;
+						}
 					}
+// ---
+
 					$opt_count++;
 				}
 				switch($delimiter){
 					case 'b':
 						$form_ele = new XoopsFormElementTray($ele_caption, '<br />');
 						while( $o = each($options) ){
-							$t =& new XoopsFormRadio(
+
+// Assigning the return value of new by reference is now deprecated.
+//							$t =& new XoopsFormRadio(
+							$t =  new XoopsFormRadio(
+
 								'',
 								$form_ele_id,
 								$selected
@@ -234,7 +334,18 @@ class LiaiseElementRenderer{
 		}
 		$s = explode('|', preg_replace('/[\{\}]/', '', $s));
 		$len = !empty($s[1]) ? $s[1] : $xoopsModuleConfig['t_width'];
-		$box = new XoopsFormText('', 'other['.$id.']', $len, 255);
+
+// --- reload ---
+//		$box = new XoopsFormText('', 'other['.$id.']', $len, 255);
+		$val = null;
+		if( isset($_POST['other'][$id]) ) {
+			$myts =& MyTextSanitizer::getInstance();
+			$val = $_POST['other'][$id];
+			$val = $myts->htmlspecialchars( $myts->stripSlashesGPC($val) );
+		}
+		$box = new XoopsFormText('', 'other['.$id.']', $len, 255, $val);
+// ------
+
 		return $box->render();
 	}
 

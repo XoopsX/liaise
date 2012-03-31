@@ -1,5 +1,14 @@
 <?php
-// $Id: index.php,v 1.1 2012/03/31 16:00:14 ohwada Exp $
+// $Id: index.php,v 1.2 2012/03/31 18:15:32 ohwada Exp $
+
+// 2007-02-18 K.OHWADA
+// use captcha module
+
+// 2006-12-20 K.OHWADA
+// use GIJOE's Ticket Class
+// use captcha
+
+// Id: index.php 26 2005-09-04 09:52:40Z tuff 
 ###############################################################################
 ##                Liaise -- Contact forms generator for XOOPS                ##
 ##                 Copyright (c) 2003-2005 NS Tai (aka tuff)                 ##
@@ -34,6 +43,11 @@
 ###############################################################################
 require 'header.php';
 $myts =& MyTextSanitizer::getInstance();
+
+// --- reload ---
+$liaise_error = null;
+// -----
+
 if( empty($_POST['submit']) ){
 	$form_id = isset($_GET['form_id']) ? intval($_GET['form_id']) : 0;
 	if( empty($form_id) ){
@@ -76,6 +90,37 @@ if( empty($_POST['submit']) ){
 		header("Location: ".LIAISE_URL);
 		exit();
 	}
+
+// --- GIJOE's Ticket Class ---
+	include_once XOOPS_ROOT_PATH.'/modules/captcha/include/gtickets.php';
+	global $xoopsGTicket;
+	if ( ! $xoopsGTicket->check( true , '',  false ) ) {
+		$liaise_error = 'Ticket Error';
+	}
+// ------
+
+// --- captcha ---
+// check captcha if anoymous user
+	elseif ( $xoopsModuleConfig['captcha'] && !is_object($xoopsUser) ) {
+		include_once XOOPS_ROOT_PATH.'/modules/captcha/include/api.php';
+		if ( !$captcha_api->validate_post() ) {
+			$liaise_error = _CAPTCHA_ERROR;
+		}
+	}
+// ------
+
+// --- reload ---
+	if ( $liaise_error ) {
+		if( !$form =& $liaise_form_mgr->get($form_id) ){
+			header("Location: ".LIAISE_URL);
+			exit();
+		}
+		require 'include/form_render.php';
+		require XOOPS_ROOT_PATH.'/footer.php';
+		exit();
+	}
+// ------
+
 	require 'include/form_execute.php';
 }
 ?>

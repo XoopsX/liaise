@@ -1,5 +1,17 @@
 <?php
-// $Id: form_render.php,v 1.1 2012/03/31 16:00:14 ohwada Exp $
+// $Id: form_render.php,v 1.2 2012/03/31 18:15:32 ohwada Exp $
+
+// 2012-03-31 K.OHWADA
+// Assigning the return value of new by reference is now deprecated.
+
+// 2007-02-18 K.OHWADA
+// use captcha module
+
+// 2006-12-20 K.OHWADA
+// use GIJOE's Ticket Class
+// use captcha
+
+// Id: form_render.php 61 2005-11-04 14:55:24Z tuff 
 ###############################################################################
 ##                Liaise -- Contact forms generator for XOOPS                ##
 ##                 Copyright (c) 2003-2005 NS Tai (aka tuff)                 ##
@@ -48,12 +60,37 @@ $elements =& $liaise_ele_mgr->getObjects($criteria, true);
 
 $form_output = new XoopsThemeForm($form->getVar('form_title'), 'liaise_'.$form->getVar('form_id'), LIAISE_URL.'index.php');
 foreach( $elements as $i ){
-	$renderer =& new LiaiseElementRenderer($i);
+
+// Assigning the return value of new by reference is now deprecated.
+//	$renderer =& new LiaiseElementRenderer($i);
+	$renderer =  new LiaiseElementRenderer($i);
+
 	$form_ele =& $renderer->constructElement();
 	$req = intval($i->getVar('ele_req'));
 	$form_output->addElement($form_ele, $req);
 	unset($form_ele);
 }
+
+// --- GIJOE's Ticket Class ---
+include_once XOOPS_ROOT_PATH.'/modules/captcha/include/gtickets.php';
+global $xoopsGTicket;
+$form_output->addElement( $xoopsGTicket->getTicketXoopsForm( __LINE__ ) );
+// ------
+
+// --- captcha ---
+// show captcha if anoymous user
+if ( $xoopsModuleConfig['captcha'] && !is_object($xoopsUser) ) {
+	include_once XOOPS_ROOT_PATH.'/modules/captcha/include/api.php';
+	$form_output->addElement( $captcha_api->make_xoops_form_label() );
+}
+// ------
+
+// --- reload ---
+if ( $liaise_error ) {
+	$xoopsTpl->assign('form_error', $liaise_error);
+}
+// -----
+
 $form_output->addElement(new XoopsFormHidden('form_id', $form->getVar('form_id')));
 $form_output->addElement(new XoopsFormButton('', 'submit', $form->getVar('form_submit_text'), 'submit'));
 // $form_output->assign($xoopsTpl);

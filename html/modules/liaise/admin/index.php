@@ -1,5 +1,14 @@
 <?php
-// $Id: index.php,v 1.1 2012/03/31 16:00:16 ohwada Exp $
+// $Id: index.php,v 1.2 2012/03/31 18:15:32 ohwada Exp $
+
+// 2012-03-31 K.OHWADA
+// $moduleperm_handler =& xoops_gethandler('groupperm');
+// Assigning the return value of new by reference is now deprecated.
+
+// 2006-12-20 K.OHWADA
+// use GIJOE's Ticket Class
+
+// Id: index.php 61 2005-11-04 14:55:24Z tuff 
 ###############################################################################
 ##                Liaise -- Contact forms generator for XOOPS                ##
 ##                 Copyright (c) 2003-2005 NS Tai (aka tuff)                 ##
@@ -37,6 +46,9 @@ $myts =& MyTextSanitizer::getInstance();
 $op = isset($_GET['op']) ? trim($_GET['op']) : 'list';
 $op = isset($_POST['op']) ? trim($_POST['op']) : $op;
 
+// added
+$moduleperm_handler =& xoops_gethandler('groupperm');
+
 switch($op){
 	case 'list':
 	default:
@@ -55,9 +67,18 @@ switch($op){
 						<td class="head" align="center">'._AM_FORM_SENDTO.'</td>
 						<td class="head" align="center">'._AM_ACTION.'</td>
 					</tr>';
+
+// --- GIJOE's Ticket Class ---
+			$ticket = $xoopsGTicket->issue( __LINE__ );
+// ------
+
 			foreach( $forms as $f ){
 				$id = $f->getVar('form_id');
-				$order =& new XoopsFormText('', 'order['.$id.']', 3, 2, $f->getVar('form_order'));
+
+// Assigning the return value of new by reference is now deprecated.
+//				$order =& new XoopsFormText('', 'order['.$id.']', 3, 2, $f->getVar('form_order'));
+				$order =  new XoopsFormText('', 'order['.$id.']', 3, 2, $f->getVar('form_order'));
+
 				$group_mgr =& xoops_gethandler('group');
 				$sendto = $f->getVar('form_send_to_group');
 				if( false != $sendto && $group =& $group_mgr->get($sendto) ){
@@ -65,7 +86,30 @@ switch($op){
 				}else{
 					$sendto = _AM_FORM_SENDTO_ADMIN;
 				}
-				$ids =& new XoopsFormHidden('ids[]', $id);
+
+// Assigning the return value of new by reference is now deprecated.
+//				$ids =& new XoopsFormHidden('ids[]', $id);
+				$ids =  new XoopsFormHidden('ids[]', $id);
+
+// --- GIJOE's Ticket Class ---
+//				echo '
+//					<tr>
+//						<td class="odd" align="center">'.$id.'</td>
+//						<td class="even" align="center">'.$order->render().'</td>
+//						<td class="odd"><a target="_blank" href="'.LIAISE_URL.'?form_id='.$id.'">'.$f->getVar('form_title').'</a></td>
+//						<td class="odd" align="center">'.$sendto.'</td>
+//						<td class="odd"><ul>
+//							<li><a href="'.LIAISE_ADMIN_URL.'?op=edit&amp;form_id='.$id.'">'
+//									._AM_FORM_ACTION_EDITFORM.'</a></li>
+//							<li><a href="elements.php?form_id='.$id.'">'
+//									._AM_FORM_ACTION_EDITELEMENT.'</a></li>
+//							<li><a href="'.LIAISE_ADMIN_URL.'?op=edit&amp;clone=1&amp;form_id='.$id.'">'
+//									._AM_FORM_ACTION_CLONE.'</a></li>
+//							<li><a href="'.LIAISE_ADMIN_URL.'?op=delete&amp;form_id='.$id.'">'
+//									._DELETE.'</a></li>
+//						</ul>'.$ids->render().'</td>
+//					</tr>';
+
 				echo '
 					<tr>
 						<td class="odd" align="center">'.$id.'</td>
@@ -78,11 +122,13 @@ switch($op){
 							<li><a href="elements.php?form_id='.$id.'">'
 									._AM_FORM_ACTION_EDITELEMENT.'</a></li>
 							<li><a href="'.LIAISE_ADMIN_URL.'?op=edit&amp;clone=1&amp;form_id='.$id.'">'
-									._AM_FORM_ACTION_CLONE.'</a></li>
-							<li><a href="'.LIAISE_ADMIN_URL.'?op=delete&amp;form_id='.$id.'">'
-									._DELETE.'</a></li>
+									._AM_FORM_ACTION_CLONE.'</a></li>';
+				echo		'<li><a href="'.LIAISE_ADMIN_URL.'?op=delete&amp;form_id='.$id.'&amp;XOOPS_G_TICKET='.$ticket.'">';
+				echo				_DELETE.'</a></li>
 						</ul>'.$ids->render().'</td>
 					</tr>';
+// ------
+
 			}
 			$submit = new XoopsFormButton('', 'submit', _AM_RESET_ORDER, 'submit');
 			echo '
@@ -92,7 +138,15 @@ switch($op){
 						<td class="foot" colspan="3">&nbsp;</td>
 					</tr>	
 					</table>';
-			$hidden =& new XoopsFormHidden('op', 'saveorder');
+
+// --- GIJOE's Ticket Class ---
+			echo $xoopsGTicket->getTicketHtml( __LINE__ );
+// ------
+
+// Assigning the return value of new by reference is now deprecated.
+//			$hidden =& new XoopsFormHidden('op', 'saveorder');
+			$hidden =  new XoopsFormHidden('op', 'saveorder');
+
 			echo $hidden->render()."\n</form>\n";
 		}
 	break;
@@ -177,14 +231,43 @@ switch($op){
 			$output->addElement($clone_form_id);
 		}
 		$output->addElement($tray);
+
+// --- GIJOE's Ticket Class ---
+		$output->addElement( $xoopsGTicket->getTicketXoopsForm( __LINE__ ) );
+// ------
+
 		$output->display();
 	break;
 
 	case 'delete':
 		if( empty($_POST['ok']) ){
+
+// --- GIJOE's Ticket Class ---	
+			if ( ! $xoopsGTicket->check( false, '',  false ) ) {
+				$err  = 'Ticket Error <br />';
+				$err .= $xoopsGTicket->getErrors();
+				redirect_header(LIAISE_ADMIN_URL, 3, $err);
+			}
+// ------
+
 			adminHtmlHeader();
-			xoops_confirm(array('op' => 'delete', 'form_id' => $_GET['form_id'], 'ok' => 1), LIAISE_ADMIN_URL, _AM_FORM_CONFIRM_DELETE);
+
+// --- GIJOE's Ticket Class ---	
+//			xoops_confirm(array('op' => 'delete', 'form_id' => $_GET['form_id'], 'ok' => 1), LIAISE_ADMIN_URL, _AM_FORM_CONFIRM_DELETE);
+			$ticket = $xoopsGTicket->issue( __LINE__ );
+			xoops_confirm(array('op' => 'delete', 'form_id' => $_GET['form_id'], 'ok' => 1, 'XOOPS_G_TICKET' => $ticket ), LIAISE_ADMIN_URL, _AM_FORM_CONFIRM_DELETE);
+// ------
+
 		}else{
+
+// --- GIJOE's Ticket Class ---	
+			if ( ! $xoopsGTicket->check( true , '',  false ) ) {
+				$err  = 'Ticket Error <br />';
+				$err .= $xoopsGTicket->getErrors();
+				redirect_header(LIAISE_ADMIN_URL, 3, $err);
+			}
+// ------
+
 			$form_id = intval($_POST['form_id']);
 			if( empty($form_id) ){
 				redirect_header(LIAISE_ADMIN_URL, 0, _AM_NOTHING_SELECTED);
@@ -200,6 +283,14 @@ switch($op){
 	break;
 
 	case 'saveorder':
+// --- GIJOE's Ticket Class ---	
+		if ( ! $xoopsGTicket->check( true , '',  false ) ) {
+			$err  = 'Ticket Error <br />';
+			$err .= $xoopsGTicket->getErrors();
+			redirect_header(LIAISE_ADMIN_URL, 3, $err);
+		}
+// ------
+
 		if( !isset($_POST['ids']) || count($_POST['ids']) < 1 ){
 			redirect_header(LIAISE_ADMIN_URL, 0, _AM_NOTHING_SELECTED);
 		}
@@ -213,6 +304,14 @@ switch($op){
 	break;
 
 	case 'saveform':
+// --- GIJOE's Ticket Class ---	
+		if ( ! $xoopsGTicket->check( true , '',  false ) ) {
+			$err  = 'Ticket Error <br />';
+			$err .= $xoopsGTicket->getErrors();
+			redirect_header(LIAISE_ADMIN_URL, 3, $err);
+		}
+// ------
+
 		if( !isset($_POST['submit']) ){
 			redirect_header(LIAISE_ADMIN_URL, 0, _AM_NOTHING_SELECTED);
 		}

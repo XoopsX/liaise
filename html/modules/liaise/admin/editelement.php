@@ -1,5 +1,10 @@
 <?php
-// $Id: editelement.php,v 1.1 2012/03/31 16:00:18 ohwada Exp $
+// $Id: editelement.php,v 1.2 2012/03/31 18:15:32 ohwada Exp $
+
+// 2006-12-20 K.OHWADA
+// use GIJOE's Ticket Class
+
+// Id: editelement.php 61 2005-11-04 14:55:24Z tuff 
 ###############################################################################
 ##                Liaise -- Contact forms generator for XOOPS                ##
 ##                 Copyright (c) 2003-2005 NS Tai (aka tuff)                 ##
@@ -159,22 +164,60 @@ switch($op){
 		$tray->addElement($submit);
 		$tray->addElement($cancel);
 		$output->addElement($tray);
+
+// --- GIJOE's Ticket Class ---
+		$output->addElement( $xoopsGTicket->getTicketXoopsForm( __LINE__ ) );
+// ------
+
 		$output->display();
 	break;
 	case 'delete':
+
 		if( empty($ele_id) ){
 			redirect_header(LIAISE_ADMIN_URL, 0, _AM_NOTHING_SELECTED);
 		}
 		if( empty($_POST['ok']) ){
+
+// --- GIJOE's Ticket Class ---	
+		if ( ! $xoopsGTicket->check( false, '',  false ) ) {
+			$err  = 'Ticket Error <br />';
+			$err .= $xoopsGTicket->getErrors();
+			redirect_header(LIAISE_ADMIN_URL, 3, $err);
+		}
+// ------
+
 			adminHtmlHeader();
-			xoops_confirm(array('op' => 'delete', 'ele_id' => $ele_id, 'form_id' => $form_id, 'ok' => 1), _THIS_PAGE, _AM_ELE_CONFIRM_DELETE);
+
+// --- GIJOE's Ticket Class ---	
+//			xoops_confirm(array('op' => 'delete', 'ele_id' => $ele_id, 'form_id' => $form_id, 'ok' => 1), _THIS_PAGE, _AM_ELE_CONFIRM_DELETE);
+			$ticket = $xoopsGTicket->issue( __LINE__ );
+			xoops_confirm(array('op' => 'delete', 'ele_id' => $ele_id, 'form_id' => $form_id, 'ok' => 1, 'XOOPS_G_TICKET' => $ticket ), _THIS_PAGE, _AM_ELE_CONFIRM_DELETE);
+// ------
+
 		}else{
+
+// --- GIJOE's Ticket Class ---	
+		if ( ! $xoopsGTicket->check( true , '',  false ) ) {
+			$err  = 'Ticket Error <br />';
+			$err .= $xoopsGTicket->getErrors();
+			redirect_header(LIAISE_ADMIN_URL, 3, $err);
+		}
+// ------
+
 			$element =& $liaise_ele_mgr->get($ele_id);
 			$liaise_ele_mgr->delete($element);
 			redirect_header(LIAISE_URL.'admin/elements.php?form_id='.$form_id, 0, _AM_DBUPDATED);
 		}
 	break;
 	case 'save':
+// --- GIJOE's Ticket Class ---	
+		if ( ! $xoopsGTicket->check( true , '',  false ) ) {
+			$err  = 'Ticket Error <br />';
+			$err .= $xoopsGTicket->getErrors();
+			redirect_header(LIAISE_ADMIN_URL, 3, $err);
+		}
+// ------
+
 		if( !empty($ele_id) ){
 			$element =& $liaise_ele_mgr->get($ele_id);
 		}else{

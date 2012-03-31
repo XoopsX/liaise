@@ -1,5 +1,10 @@
 <?php
-// $Id: form_execute.php,v 1.1 2012/03/31 16:00:15 ohwada Exp $
+// $Id: form_execute.php,v 1.2 2012/03/31 18:15:32 ohwada Exp $
+
+// 2012-03-31 K.OHWADA
+// Assigning the return value of new by reference is now deprecated.
+
+// Id: form_execute.php 41 2005-09-18 16:28:09Z tuff 
 ###############################################################################
 ##                Liaise -- Contact forms generator for XOOPS                ##
 ##                 Copyright (c) 2003-2005 NS Tai (aka tuff)                 ##
@@ -75,9 +80,17 @@ foreach( $elements as $i ){
 					$mime = empty($ele_value[2]) ? 0 : explode('|', $ele_value[2]);
 
 					if( $ele_type == 'uploadimg' ){
-						$uploader[$ele_id] =& new LiaiseMediaUploader(LIAISE_UPLOAD_PATH, $ele_value[0], $ext, $mime, $ele_value[4], $ele_value[5]);
+
+// Assigning the return value of new by reference is now deprecated.
+//						$uploader[$ele_id] =% new LiaiseMediaUploader(LIAISE_UPLOAD_PATH, $ele_value[0], $ext, $mime, $ele_value[4], $ele_value[5]);
+						$uploader[$ele_id] =  new LiaiseMediaUploader(LIAISE_UPLOAD_PATH, $ele_value[0], $ext, $mime, $ele_value[4], $ele_value[5]);
+
 					}else{
-						$uploader[$ele_id] =& new LiaiseMediaUploader(LIAISE_UPLOAD_PATH, $ele_value[0], $ext, $mime);
+
+// Assigning the return value of new by reference is now deprecated.
+//						$uploader[$ele_id] =& new LiaiseMediaUploader(LIAISE_UPLOAD_PATH, $ele_value[0], $ext, $mime);
+						$uploader[$ele_id] =  new LiaiseMediaUploader(LIAISE_UPLOAD_PATH, $ele_value[0], $ext, $mime);
+
 					}
 					if( $ele_value[0] == 0 ){
 						$uploader[$ele_id]->noAdminSizeCheck(true);

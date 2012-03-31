@@ -1,5 +1,17 @@
 <?php
-// $Id: xoops_version.php,v 1.1 2012/03/31 16:00:14 ohwada Exp $
+// $Id: xoops_version.php,v 1.2 2012/03/31 18:15:32 ohwada Exp $
+
+// 2008-09-15 K.OHWADA
+// set ISO-2022-JP when ja_utf8
+
+// 2007-02-18 K.OHWADA
+// use captcha module
+
+// 2006-12-20 K.OHWADA
+// change mail_charset for Japanese
+// add captcha
+
+// Id: xoops_version.php 26 2005-09-04 09:52:40Z tuff 
 ###############################################################################
 ##                Liaise -- Contact forms generator for XOOPS                ##
 ##                 Copyright (c) 2003-2005 NS Tai (aka tuff)                 ##
@@ -30,7 +42,10 @@
 ###############################################################################
 
 $modversion['name'] = _MI_LIAISE_NAME;
-$modversion['version'] = '1.26';
+
+//$modversion['version'] = '1.26';
+$modversion['version'] = '1.30';
+
 $modversion['description'] = _MI_LIAISE_DESC;
 $modversion['author'] = "NS Tai (aka tuff)";
 $modversion['credits'] = "<a href='http://www.brandycoke.com/' target='_blank'>Brandycoke Productions</a>";
@@ -115,7 +130,18 @@ $modversion['config'][6]['title'] = '_MI_LIAISE_MAIL_CHARSET';
 $modversion['config'][6]['description'] = '_MI_LIAISE_MAIL_CHARSET_DESC';
 $modversion['config'][6]['formtype'] = 'textbox';
 $modversion['config'][6]['valuetype'] = 'text';
-$modversion['config'][6]['default'] = _CHARSET;
+
+// --- for Japanese ---
+//$modversion['config'][6]['default'] = _CHARSET;
+$charset = _CHARSET;
+global $xoopsConfig;
+if (( $xoopsConfig['language'] == 'japanese' )||
+    ( $xoopsConfig['language'] == 'ja_utf8' ))
+{
+	$charset = 'ISO-2022-JP';
+}
+$modversion['config'][6]['default'] = $charset;
+//------
 
 // $xoopsModuleConfig['prefix']
 $modversion['config'][7]['name'] = 'prefix';
@@ -156,5 +182,16 @@ $modversion['config'][11]['description'] = '_MI_LIAISE_UPLOADDIR_DESC';
 $modversion['config'][11]['formtype'] = 'textbox';
 $modversion['config'][11]['valuetype'] = 'text';
 $modversion['config'][11]['default'] = XOOPS_UPLOAD_PATH.'/'.uniqid(rand());
+
+// --- captcha ---
+// $xoopsModuleConfig['captcha']
+include_once XOOPS_ROOT_PATH.'/modules/captcha/include/lang.php';
+$modversion['config'][12]['name'] = 'captcha';
+$modversion['config'][12]['title'] = '_CAPTCHA_CONFIG_TITLE';
+$modversion['config'][12]['description'] = '_CAPTCHA_CONFIG_DESC';
+$modversion['config'][12]['formtype'] = 'yesno';
+$modversion['config'][12]['valuetype'] = 'int';
+$modversion['config'][12]['default'] = 1;
+// --- captcha ---
 
 ?>

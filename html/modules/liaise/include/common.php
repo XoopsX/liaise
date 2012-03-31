@@ -1,5 +1,10 @@
 <?php
-// $Id: common.php,v 1.1 2012/03/31 16:00:14 ohwada Exp $
+// $Id: common.php,v 1.2 2012/03/31 18:15:32 ohwada Exp $
+
+// 2008-09-15 K.OHWADA
+// for Xoops Cube Legacy
+
+// Id: common.php 26 2005-09-04 09:52:40Z tuff 
 ###############################################################################
 ##                Liaise -- Contact forms generator for XOOPS                ##
 ##                 Copyright (c) 2003-2005 NS Tai (aka tuff)                 ##
@@ -42,6 +47,14 @@ if( !defined("LIAISE_CONSTANTS_DEFINED") ){
 }
 
 $liaise_form_mgr =& xoops_getmodulehandler('forms');
+
+// --- for XCL ---
+global $moduleperm_handler;
+if(!isset($moduleperm_handler)) {
+	$moduleperm_handler =& xoops_gethandler('groupperm');
+	$GLOBALS['moduleperm_handler'] = $moduleperm_handler;
+}
+// -----
 
 if( false != LIAISE_UPLOAD_PATH ){
 	if( !is_dir(LIAISE_UPLOAD_PATH) ){

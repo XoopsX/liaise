@@ -1,3 +1,10 @@
+<{* $Id: liaise_form.html,v 1.2 2012/03/31 18:15:32 ohwada Exp $ *}>
+
+<{* ticket and captcha error *}>
+<{if $form_error != ""}>
+  <div class="errorMsg"><{$form_error}></div>
+<{/if}>
+
 <{if $form_is_hidden != ""}><p><b><{$form_is_hidden}></b></p><{/if}>
 <{if $form_intro != ""}><p><{$form_intro}></p><{/if}>
 
