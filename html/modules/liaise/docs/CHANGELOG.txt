@@ -1,0 +1,120 @@
+Version History of Liaise
+By NS Tai (aka tuff) <tuff@brandycoke.com>
+--------------------------------------------------
+Dec 23, 2005 Version 1.26 / 1.5
+- (Version 1.26) Now compatible with XOOPS Cube 2.0.12 / 13a
+- (Version 1.5) Fixed form element "selection" not being saved when php flag "magic_quotes_gpc" is turned on
+- Fixed form intro not shown when there is only one form available
+- Fixed form listing page in admin goes blank when a form is set to send mail to a non-exists group
+- Fixed "call by reference" errors appear on PHP 4.4 / 5.1 
+- Fixed various "undefined index" error
+- Russian and Spanish language pack added (Thanks Fizot and Ismael Ríos)
+--------------------------------------------------
+JUL 19, 2005 Version 1.24
+- Answers of form element select/check boxes are now separated by line breaks
+- Returns an error when the dimensions of uploaded images cannot be detected.
+- Fixed form element textarea/html that slashes won't be stripped when the php setting "magic_quotes_gpc" is on
+- Fixed form element image/file upload return errors without uploading a file
+- Fixed forms that are set as "hidden" (setting "display = 0") but still accessable by non-webmasters/admins
+- Fixed php fatal error when no accessable form can be displayed
+- Sends urls to download the uploaded files stored in the server in order to avoid opening insecure files directly
+- Japanese, Bulgarian and Italian language pack added (Thanks Akihiko Shirai, Stefan Ilivanov and Sandro Carniel)
+--------------------------------------------------
+FEB 16, 2005: Version 1.23
+ - Cleaned up "Undefined variable/index" messages when php-debug is turned on
+ - Page loading time slightly reduced (in theory)
+ - New form elements for files/images uploading
+ - Improved error handling
+ - Improved appearance of form elements listings
+ - Fixed a bug that "other" options wouldn't strip slashes
+ - Changed "Mail from name/email" to site name and admin email
+ - Added "Reply-To name/email" for submitted user name and email
+ - XOOPS version check: A warning message will be shown if the version of XOOPS does not match the system requirement.
+ - Various bugs/typo fixes
+--------------------------------------------------
+DEC 26, 2004: Version 1.22
+ - Fixed incompatibility with XOOPS 2.0.9 / PHP 5
+ - Italian language pack included (Thanks to Sandro Carniel <http://www.opzione.com/>)
+ - Dutch language pack included (Thanks to Wouter Debacker <http://ictbrokjes.be/>)
+--------------------------------------------------
+MAY 11, 2004: Version 1.21
+ - French language pack added (thanks Solo71)
+--------------------------------------------------
+MAY 7, 2004: Version 1.21
+ - German language pack added (thanks Bender)
+ - Access keys added in admin section
+ 	1 > Contact form listing
+ 	2 > Create a new form
+ 	3 > Create form elements
+ 	4 > Preferences
+ - Fixed some typos
+ - Minor changes in preferences default values
+--------------------------------------------------
+MAY 5, 2004: Version 1.2
+New features
+ - Unlimited contact forms for different groups of users and receivers
+ - Customizable form settings, including group permissions, sent the form via email/private message and additional text description for each form.
+ - Cloneable forms and form elements
+ - Form elements can be duplicated among all forms
+ - Text prefix/suffix for required fields
+ - Customizable text for submit buttons
+ - New element for displaying plain text, html tags or xoopscode in the form
+ - More flexible Smarty templates
+Form elements
+ - Captions are no longer required
+ - Fixed a bug when error ocurr while storing data in database but error message does not show up.
+ - Fixed a bug that counting form elements does not work
+ - New function for storing default elements when a new form is created.
+Preferences
+ - Several configurations relocated to form settings
+ - Freedom to choose additional information to be sent along with the submitted information
+ - New configurable options: introduction text/html, text to be displayed in all forms, and text prefix/suffix for required fields
+Templates
+ - New template "liaise_index.html" for form listing if more then one form available to the users.
+ - Default template "liaise.html" renamed as "liaise_form.html"; more smarty variables assigned.
+ - Restructured mail template syntax
+MISC
+ - Reorganized admin menu
+ - New sql dump for installation
+ - Upgrade script for version 1.x
+--------------------------------------------------
+Apr 8, 2004: Version 1.1.1
+Fixed a bug where slashes appear in several cases if magic_quotes_gpc is disabled.
+--------------------------------------------------
+Mar 17, 2004: hot fix
+Fixed a bug that getting the wrong size from database when editing an existed text area form element.
+--------------------------------------------------
+Mar 4, 2004: Version 1.1RC
+- Option to change text encoding of emails
+- Generates "Reply-To name/address" header for emails if such information is available
+- Check for invalid email address format
+- Check boxes / radio buttons and selections can now be set as required fields
+- Generates error messages if any required field is empty
+- Smarty template for error messages
+- Additional "Other" option for check boxes / radio buttons
+- Check if the submitter's ip is behind a proxy
+--------------------------------------------------
+Dec 3, 2003: Version 1.0b5
+- German language pack included (Thanks to frankblack <http://www.myxoops.org/>)
+--------------------------------------------------
+Oct 9, 2003: Version 1.0b5
+- Bug fixed for selection boxes that causes submitting incorrect information.
+--------------------------------------------------
+Sep 23, 2003: Version 1.0b4
+- Fixed incompatibility with XOOPS 2.0.4
+- Changed module default name to aviod confusion with the system Contact Us module
+- Fixed a typo in xoops_version.php
+- French language pack included (Thanks to Solo71 <http://www.frxoops.org/>)
+--------------------------------------------------
+Sep 19, 2003: Version 1.0b3
+- Fixed incompatibility with XOOPS 2.0.4
+--------------------------------------------------
+Jul 24, 2003: Version 1.0b2
+- Fixed problem for submitting information under PHP 4.2.x (Thanks Tim from <http://www.ghosts-uk.net/> )
+- Fixed a typo.
+- Code for rendering/saving select boxes changed.
+- Dropped support for PHP version lower than 4.2.x
+------------
+Jul 17, 2003: Version 1.0b1
+- First public release.
+

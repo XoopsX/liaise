@@ -1,0 +1,17 @@
+Notes for upgrading Liaise 1.1x to 1.2x/1.5x
+By NS Tai (aka tuff) <tuff@brandycoke.com>
+-------------------------
+
+Preparation
+Backup your database, necessary files and customized templates before upgrading even if you have nothing to lose. Otherwise, don't cry or curse at the developer or kick and slap your dog when things got messed up.
+Go to your site and login in as webmaster, or any account which has the right to administrate the module. Close the site temporary if possible, or at least deactivate Liaise from visitors.
+
+Do upgrade
+Now replace the old files by uploading new files, there is no upgrade package exist since over 90% of the files are modified, just replace all of them.
+Point your browser to yoursite/modules/liaise/admin/upgrade.php and follow the instructions on screen. You can tell when the upgrade procedure is finished or failed.
+
+Once successful, follow the link that tell you to update the module. If, in the supposed contingency, upgrade failed, drop down the error messages if you see any, and ask the developer "Hey what the heck happened to your script?" if he is awake.
+
+And rest
+When everything settled down, you can delete the file "upgrade.php". Please note that the template file "liaise.html" is now renamed as "liaise_form.html", if you have the old template customized you should now take a look at the new tags and modify them to match your style.
+
