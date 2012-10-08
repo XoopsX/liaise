@@ -1,3 +1,5 @@
+$Id: readme_en.txt,v 1.2 2012/10/08 02:14:16 ohwada Exp $
+
 =================================================
 Title:   liaise + captcha + XCL
 Version: 1.31
