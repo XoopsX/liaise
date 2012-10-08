@@ -1,5 +1,8 @@
 <?php
-// $Id: elementrenderer.php,v 1.2 2012/03/31 18:15:32 ohwada Exp $
+// $Id: elementrenderer.php,v 1.3 2012/10/08 02:07:10 ohwada Exp $
+
+// 2012-10-08 K.OHWADA
+// BUG: all items show the same value 
 
 // 2012-03-31 K.OHWADA
 // Assigning the return value of new by reference is now deprecated.
@@ -228,6 +231,10 @@ class LiaiseElementRenderer{
 						$t->addOption($o['key'], $myts->stripSlashesGPC($o['value']));
 					}
 					$form_ele->addElement($t);
+
+// BUG: all items show the same value 					
+					unset($t);
+
 				}
 			break;
 			
@@ -283,6 +290,10 @@ class LiaiseElementRenderer{
 								$t->addOption($o['key'], $myts->stripSlashesGPC($o['value']));
 							}
 							$form_ele->addElement($t);
+
+// BUG: all items show the same value 					
+							unset($t);
+
 						}
 					break;
 					case 's':

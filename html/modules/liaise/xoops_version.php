@@ -1,5 +1,8 @@
 <?php
-// $Id: xoops_version.php,v 1.2 2012/03/31 18:15:32 ohwada Exp $
+// $Id: xoops_version.php,v 1.3 2012/10/08 02:07:10 ohwada Exp $
+
+// 2012-10-08 K.OHWADA
+// 1.31
 
 // 2008-09-15 K.OHWADA
 // set ISO-2022-JP when ja_utf8
@@ -44,7 +47,7 @@
 $modversion['name'] = _MI_LIAISE_NAME;
 
 //$modversion['version'] = '1.26';
-$modversion['version'] = '1.30';
+$modversion['version'] = '1.31';
 
 $modversion['description'] = _MI_LIAISE_DESC;
 $modversion['author'] = "NS Tai (aka tuff)";

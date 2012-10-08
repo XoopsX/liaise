@@ -1,5 +1,8 @@
 <?php
-// $Id: footer.php,v 1.2 2012/03/31 18:15:32 ohwada Exp $
+// $Id: footer.php,v 1.3 2012/10/08 02:07:10 ohwada Exp $
+
+// 2012-10-08 K.OHWADA
+// show warning in xcl 2.2
 
 // 2008-09-15 K.OHWADA
 // for Xoops Cube Legacy
@@ -46,7 +49,8 @@ echo $credits;
 // --- for XCL ---
 //$version_check = preg_match('/2\.0\.[9|10|11|12|13]/', XOOPS_VERSION);
 if ( defined( 'XOOPS_CUBE_LEGACY' ) ) {
-	$pattern = '/2\.1\.\d+/';
+// show warning in xcl 2.2
+	$pattern = '/2\.[1|2]/';
 } else {
 	$pattern = '/2\.0\.\d+/';
 }
