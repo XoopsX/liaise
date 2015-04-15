@@ -66,7 +66,7 @@ class LiaiseElementsHandler {
 		$this->db =& $db;
 		$this->db_table = $this->db->prefix('liaise_formelements');
 	}
-	function &getInstance(&$db) {
+	public static function &getInstance(&$db) {
 		static $instance;
 		if (!isset($instance)) {
 			$instance = new LiaiseElementsHandler($db);

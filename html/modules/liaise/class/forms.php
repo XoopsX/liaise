@@ -73,7 +73,7 @@ class LiaiseFormsHandler extends XoopsObjectHandler {
 		$this->moduleperm_handler =& xoops_gethandler('groupperm');
 
 	}
-	function &getInstance(&$db){
+	public static function &getInstance(&$db){
 		static $instance;
 		if( !isset($instance) ){
 			$instance = new LiaiseFormsHandler($db);
