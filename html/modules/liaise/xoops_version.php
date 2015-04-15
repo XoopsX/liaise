@@ -47,7 +47,7 @@
 $modversion['name'] = _MI_LIAISE_NAME;
 
 //$modversion['version'] = '1.26';
-$modversion['version'] = '1.31';
+$modversion['version'] = '1.32';
 
 $modversion['description'] = _MI_LIAISE_DESC;
 $modversion['author'] = "NS Tai (aka tuff)";
