@@ -42,7 +42,7 @@
 ##  Project: Liaise                                                          ##
 ###############################################################################
 require 'header.php';
-$myts =& MyTextSanitizer::getInstance();
+(method_exists('MyTextSanitizer', 'sGetInstance') and $myts =& MyTextSanitizer::sGetInstance()) || $myts =& MyTextSanitizer::getInstance();
 
 // --- reload ---
 $liaise_error = null;

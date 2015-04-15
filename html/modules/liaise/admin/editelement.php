@@ -41,7 +41,7 @@ include("admin_header.php");
 $liaise_ele_mgr =& xoops_getmodulehandler('elements');
 include_once LIAISE_ROOT_PATH.'class/elementrenderer.php';
 define('_THIS_PAGE', LIAISE_URL.'admin/editelement.php');
-$myts =& MyTextSanitizer::getInstance();
+(method_exists('MyTextSanitizer', 'sGetInstance') and $myts =& MyTextSanitizer::sGetInstance()) || $myts =& MyTextSanitizer::getInstance();
 if( $liaise_form_mgr->getCount() < 1 ){
 	redirect_header(LIAISE_ADMIN_URL, 0, _AM_GO_CREATE_FORM);
 }

@@ -53,7 +53,7 @@ class LiaiseElementRenderer{
 
 	function &constructElement($admin=false){
 		global $xoopsUser, $form;
-		$myts =& MyTextSanitizer::getInstance();
+		(method_exists('MyTextSanitizer', 'sGetInstance') and $myts =& MyTextSanitizer::sGetInstance()) || $myts =& MyTextSanitizer::getInstance();
 		$ele_caption = $this->_ele->getVar('ele_caption');
 		$ele_value = $this->_ele->getVar('ele_value');
 		$e = $this->_ele->getVar('ele_type');
@@ -350,7 +350,7 @@ class LiaiseElementRenderer{
 //		$box = new XoopsFormText('', 'other['.$id.']', $len, 255);
 		$val = null;
 		if( isset($_POST['other'][$id]) ) {
-			$myts =& MyTextSanitizer::getInstance();
+			(method_exists('MyTextSanitizer', 'sGetInstance') and $myts =& MyTextSanitizer::sGetInstance()) || $myts =& MyTextSanitizer::getInstance();
 			$val = $_POST['other'][$id];
 			$val = $myts->htmlspecialchars( $myts->stripSlashesGPC($val) );
 		}

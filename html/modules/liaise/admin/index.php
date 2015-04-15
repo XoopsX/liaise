@@ -42,7 +42,7 @@
 ##  Project: Liaise                                                          ##
 ###############################################################################
 include 'admin_header.php';
-$myts =& MyTextSanitizer::getInstance();
+(method_exists('MyTextSanitizer', 'sGetInstance') and $myts =& MyTextSanitizer::sGetInstance()) || $myts =& MyTextSanitizer::getInstance();
 $op = isset($_GET['op']) ? trim($_GET['op']) : 'list';
 $op = isset($_POST['op']) ? trim($_POST['op']) : $op;
 
